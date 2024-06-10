@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git 'https://github.com/issa2580/ligne-rouge.git'
+                git 'https://github.com/issa2580/tsts.git'
             }
         }
         stage('SonarQube Analysis') {
