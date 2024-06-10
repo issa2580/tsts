@@ -1,0 +1,27 @@
+---
+- name: Deploy applications to Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Deploy Apache application
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', '../kubernetes/app-deployment.yml') }}"
+        kubeconfig: "/home/rootkit/.kube/config"
+
+    - name: Deploy MySQL application
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', '../kubernetes/db-deployment.yml') }}"
+        kubeconfig: "/home/rootkit/.kube/config"
+
+    - name: Create service for Apache application
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', '../kubernetes/app-service.yml') }}"
+        kubeconfig: "/home/rootkit/.kube/config"
+
+    - name: Create service for MySQL application
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', '../kubernetes/db-service.yml') }}"
+        kubeconfig: "/home/rootkit/.kube/config"
