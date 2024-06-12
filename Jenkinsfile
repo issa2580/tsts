@@ -1,8 +1,8 @@
 pipeline {
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
-        SONARQUBE_TOKEN = credentials('token-sonarqube')
-        SONARQUBE_PROJECT = 'ligne-rouge'
+        // SONARQUBE_URL = 'http://localhost:9000'
+        // SONARQUBE_TOKEN = credentials('token-sonarqube')
+        // SONARQUBE_PROJECT = 'ligne-rouge'
         webDockerImageName = "martinez42/ligne-rouge-web"
         dbDockerImageName = "martinez42/ligne-rouge-db"
         webDockerImage = ""
@@ -19,13 +19,13 @@ pipeline {
                 git 'https://github.com/issa2580/tsts.git'
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '/opt/sonar-scanner-6.0.0.4432-linux/bin/sonar-scanner -Dsonar.projectKey=$SONARQUBE_PROJECT -Dsonar.sources=. -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN'
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv('SonarQube') {
+        //             sh '/opt/sonar-scanner-6.0.0.4432-linux/bin/sonar-scanner -Dsonar.projectKey=$SONARQUBE_PROJECT -Dsonar.sources=. -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN'
+        //         }
+        //     }
+        // }
         stage('Build Web Docker image') {
             steps {
                 script {
