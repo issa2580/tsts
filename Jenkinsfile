@@ -14,17 +14,26 @@ pipeline {
     }
     agent any
     stages {
-            stage('Build Docker images') {
-                steps {
-                    script {
-                        sh 'docker-compose up --build -d'
-                    }
+        stage('Build Docker images') {
+            steps {
+                script {
+                    sh 'docker-compose up --build -d'
                 }
             }
+        }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '/opt/sonar-scanner-6.0.0.4432-linux/bin/sonar-scanner -Dsonar.projectKey=$SONARQUBE_PROJECT -Dsonar.sources=. -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN'
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                        waitForQualityGate abortPipeline: true
+                    }
                 }
             }
         }
