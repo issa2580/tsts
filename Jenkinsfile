@@ -58,7 +58,7 @@ pipeline {
                     cd ${ANSIBLE_DIR}
                     sudo python3 -m venv venv
                     . venv/bin/activate
-                    pip install kubernetes
+                    sudo pip install kubernetes
                     ansible-playbook ${ANSIBLE_DIR}/playbook.yml
                     """
                 }
