@@ -46,11 +46,15 @@ pipeline {
                     def dockerRegistry = "https://registry.hub.docker.com/"
                     def dockerUsername = "martinez42"
                     def dockerPassword = "Passer@4221"
+                    def images = ["web", "sonarqube", "postgres", "db"]
+                    def repository = "${dockerUsername}/ligne-rouge_master"
                     sh "docker login $dockerRegistry -u $dockerUsername -p $dockerPassword"
-                    sh "docker push ligne-rouge_master-web:latest"
-                    sh "docker push ligne-rouge_master-sonarqube:latest"
-                    sh "docker push ligne-rouge_master-postgres:latest"
-                    sh "docker push ligne-rouge_master-db:latest"
+                    images.each { image ->
+                        def localImage = "ligne-rouge_master-${image}:latest"
+                        def remoteImage = "${dockerUsername}/ligne-rouge_master-${image}:latest"
+                        sh "docker tag ${localImage} ${remoteImage}"
+                        sh "docker push ${remoteImage}"
+                    }
                 }
             }
         }
