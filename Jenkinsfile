@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    sudo apt install -y python3-venv
+                    sudo apt-get install -y python3-venv
                     cd ${ANSIBLE_DIR}
                     sudo python3 -m venv venv
                     . venv/bin/activate
