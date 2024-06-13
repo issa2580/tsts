@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: App.Dockerfile
+      dockerfile: apache.Dockerfile
     ports:
       - "8000:80"
     depends_on:
@@ -18,7 +18,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: Db.Dockerfile
+      dockerfile: mysql.Dockerfile
     #volumes:
     #  - mysql_data:/var/lib/mysql
     environment:
