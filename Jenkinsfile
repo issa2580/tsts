@@ -8,6 +8,9 @@ pipeline {
         // webDockerImage = ""
         // dbDockerImage = ""
         // registryCredential = 'docker-credentiel'
+        DOCKER_REGISTRY = 'https://registry.hub.docker.com'
+        DOCKER_CREDENTIALS_ID = 'docker-credentiel'
+        DOCKER_COMPOSE_FILE = 'docker-compose.yml' 
         KUBECONFIG = "/home/rootkit/.kube/config"
         TERRA_DIR  = "/home/rootkit/tst/ligne-rouge/terraform"
         ANSIBLE_DIR = "/home/rootkit/tst/ligne-rouge/ansible"
@@ -37,16 +40,21 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Pushing Images to Docker Registry') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-        //                 webDockerImage.push('latest')
-        //                 dbDockerImage.push('latest')
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Login and Push Docker Images') {
+            steps {
+                script {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
+                        def services = ['web', 'db', 'postgres', 'sonarqube']
+                        
+                        for (service in services) {
+                            def imageName = "${DOCKER_REGISTRY}/${service}"
+                            sh "docker-compose -f ${DOCKER_COMPOSE_FILE} images | grep ${service} | awk '{print \$3}' | xargs -I {} docker tag {} ${imageName}:latest"
+                            sh "docker push ${imageName}:latest"
+                        }
+                    }
+                }
+            }
+        }
         stage("Provision Kubernetes Cluster with Terraform") {
             steps {
                 script {
