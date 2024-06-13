@@ -21,19 +21,6 @@ pipeline {
                     }
                 }
             }
-            // stage('SonarQube Analysis') {
-            //     steps {
-            //         withSonarQubeEnv('SonarQube') {
-            //             sh """
-            //             ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-            //             -Dsonar.projectKey=${SONARQUBE_PROJECT} \
-            //             -Dsonar.sources=. \
-            //             -Dsonar.host.url=${SONARQUBE_URL} \
-            //             -Dsonar.login=${SONARQUBE_TOKEN}
-            //             """
-            //         }
-            //     }
-            // }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
@@ -41,20 +28,6 @@ pipeline {
                 }
             }
         }
-        // stage('Build Web Docker image') {
-        //     steps {
-        //         script {
-        //             webDockerImage = docker.build webDockerImageName, "-f apache.Dockerfile ."
-        //         }
-        //     }
-        // }
-        // stage('Build DB Docker image') {
-        //     steps {
-        //         script {
-        //             dbDockerImage = docker.build dbDockerImageName, "-f mysql.Dockerfile ."
-        //         }
-        //     }
-        // }
         // stage('Pushing Images to Docker Registry') {
         //     steps {
         //         script {
