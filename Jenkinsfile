@@ -21,20 +21,20 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Build Web Docker image') {
-        //     steps {
-        //         script {
-        //             webDockerImage = docker.build webDockerImageName, "-f apache.Dockerfile ."
-        //         }
-        //     }
-        // }
-        // stage('Build DB Docker image') {
-        //     steps {
-        //         script {
-        //             dbDockerImage = docker.build dbDockerImageName, "-f mysql.Dockerfile ."
-        //         }
-        //     }
-        // }
+        stage('Build Web Docker image') {
+            steps {
+                script {
+                    webDockerImage = docker.build webDockerImageName, "-f apache.Dockerfile ."
+                }
+            }
+        }
+        stage('Build DB Docker image') {
+            steps {
+                script {
+                    dbDockerImage = docker.build dbDockerImageName, "-f mysql.Dockerfile ."
+                }
+            }
+        }
         // stage('Pushing Images to Docker Registry') {
         //     steps {
         //         script {
