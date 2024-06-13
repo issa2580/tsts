@@ -21,30 +21,30 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Build Web Docker image') {
-        //     steps {
-        //         script {
-        //             webDockerImage = docker.build webDockerImageName, "-f App.Dockerfile ."
-        //         }
-        //     }
-        // }
-        // stage('Build DB Docker image') {
-        //     steps {
-        //         script {
-        //             dbDockerImage = docker.build dbDockerImageName, "-f Db.Dockerfile ."
-        //         }
-        //     }
-        // }
-        // stage('Pushing Images to Docker Registry') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-        //                 webDockerImage.push('latest')
-        //                 dbDockerImage.push('latest')
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build Web Docker image') {
+            steps {
+                script {
+                    webDockerImage = docker.build webDockerImageName, "-f App.Dockerfile ."
+                }
+            }
+        }
+        stage('Build DB Docker image') {
+            steps {
+                script {
+                    dbDockerImage = docker.build dbDockerImageName, "-f Db.Dockerfile ."
+                }
+            }
+        }
+        stage('Pushing Images to Docker Registry') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        webDockerImage.push('latest')
+                        dbDockerImage.push('latest')
+                    }
+                }
+            }
+        }
         stage("Provision Kubernetes Cluster with Terraform") {
             steps {
                 script {
