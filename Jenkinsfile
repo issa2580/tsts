@@ -28,24 +28,13 @@ pipeline {
                 }
             }
         }
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             timeout(time: 1, unit: 'HOURS') {
-        //                 waitForQualityGate abortPipeline: true
-        //                 currentBuild.result = qualityGate.status
-        //             }
-        //         }
-        //     }
-        // }
         stage('Quality Gate') {
             steps {
                 script {
-                    def qg = waitForQualityGate()
-                    if (qg.status != 'OK') {
-                        error "Pipeline aborted due to Quality Gate failure: ${qg.status}"
+                    timeout(time: 1, unit: 'HOURS') {
+                        waitForQualityGate abortPipeline: true
+                        currentBuild.result = qualityGate.status
                     }
-                    currentBuild.result = qg.status
                 }
             }
         }
