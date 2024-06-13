@@ -31,7 +31,7 @@ pipeline {
         stage('Notify Quality Gate with Slack') {
             when {
                 expression {
-                    currentBuild.result != null && currentBuild.result != 'SUCCESS'
+                    currentBuild.result == 'SUCCESS'
                 }
             }
             steps {
