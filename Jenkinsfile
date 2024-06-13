@@ -17,7 +17,7 @@ pipeline {
             stage('Build Docker images') {
                 steps {
                     script {
-                        sh 'docker-compose down -v'
+                        // sh 'docker-compose down -v'
                         sh 'docker-compose up --build -d'
                     }
                 }
