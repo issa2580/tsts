@@ -8,7 +8,7 @@ pipeline {
         // webDockerImage = ""
         // dbDockerImage = ""
         // registryCredential = 'docker-credentiel'
-        DOCKER_REGISTRY = 'https://registry.hub.docker.com'
+        DOCKER_REGISTRY = 'registry.hub.docker.com'
         DOCKER_CREDENTIALS_ID = 'docker-credentiel'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml' 
         KUBECONFIG = "/home/rootkit/.kube/config"
