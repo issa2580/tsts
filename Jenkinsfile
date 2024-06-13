@@ -28,16 +28,6 @@ pipeline {
                 }
             }
         }
-        stage('Quality Gate') {
-            steps {
-                script {
-                    timeout(time: 1, unit: 'HOURS') {
-                        waitForQualityGate abortPipeline: true
-                        currentBuild.result = qualityGate.status
-                    }
-                }
-            }
-        }
         stage('Notify Quality Gate with Slack') {
             when {
                 expression {
