@@ -21,26 +21,26 @@ pipeline {
                     }
                 }
             }
-            stage('SonarQube Analysis') {
-                steps {
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                        ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=${SONARQUBE_PROJECT} \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=${SONARQUBE_URL} \
-                        -Dsonar.login=${SONARQUBE_TOKEN}
-                        """
-                    }
+            // stage('SonarQube Analysis') {
+            //     steps {
+            //         withSonarQubeEnv('SonarQube') {
+            //             sh """
+            //             ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
+            //             -Dsonar.projectKey=${SONARQUBE_PROJECT} \
+            //             -Dsonar.sources=. \
+            //             -Dsonar.host.url=${SONARQUBE_URL} \
+            //             -Dsonar.login=${SONARQUBE_TOKEN}
+            //             """
+            //         }
+            //     }
+            // }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '/opt/sonar-scanner-6.0.0.4432-linux/bin/sonar-scanner -Dsonar.projectKey=$SONARQUBE_PROJECT -Dsonar.sources=. -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN'
                 }
             }
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv('SonarQube') {
-        //             sh '/opt/sonar-scanner-6.0.0.4432-linux/bin/sonar-scanner -Dsonar.projectKey=$SONARQUBE_PROJECT -Dsonar.sources=. -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN'
-        //         }
-        //     }
-        // }
+        }
         // stage('Build Web Docker image') {
         //     steps {
         //         script {
