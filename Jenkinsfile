@@ -40,18 +40,17 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Login and Push Docker Images') {
+        stage('Pushing Images to Docker Registry') {
             steps {
                 script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
-                        def services = ['web', 'db', 'postgres', 'sonarqube']
-                        
-                        for (service in services) {
-                            def imageName = "${DOCKER_REGISTRY}/${service}"
-                            sh "docker-compose -f ${DOCKER_COMPOSE_FILE} images | grep ${service} | awk '{print \$3}' | xargs -I {} docker tag {} ${imageName}:latest"
-                            sh "docker push ${imageName}:latest"
-                        }
-                    }
+                    def dockerRegistry = "https://registry.hub.docker.com/"
+                    def dockerUsername = "martinez42"
+                    def dockerPassword = "Passer@4221"
+                    sh "docker login $dockerRegistry -u $dockerUsername -p $dockerPassword"
+                    sh "docker push ligne-rouge_master-web:latest"
+                    sh "docker push ligne-rouge_master-sonarqube:latest"
+                    sh "docker push ligne-rouge_master-postgres:latest"
+                    sh "docker push ligne-rouge_master-db:latest"
                 }
             }
         }
