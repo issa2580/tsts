@@ -47,13 +47,12 @@ pipeline {
                     def dockerUsername = "martinez42"
                     def dockerPassword = "Passer@4221"
                     def images = ["web", "sonarqube", "postgres", "db"]
-                    def repository = "${dockerUsername}/ligne-rouge_master"
                     sh "docker login $dockerRegistry -u $dockerUsername -p $dockerPassword"
                     images.each { image ->
-                        def localImage = "ligne-rouge_master-${image}:latest"
-                        def remoteImage = "${dockerUsername}/ligne-rouge_master-${image}:latest"
+                        def localImage = "ligne-rouge-${image}:latest"
+                        def remoteImage = "${dockerUsername}/ligne-rouge-${image}:latest"
                         sh "docker tag ${localImage} ${remoteImage}"
-                        sh "docker push ${remoteImage}"
+                        sh "sudo docker push ${remoteImage}"
                     }
                 }
             }
