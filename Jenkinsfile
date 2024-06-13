@@ -3,11 +3,8 @@ pipeline {
         SONARQUBE_URL = 'http://localhost:9000'
         SONARQUBE_TOKEN = credentials('sonar-token')
         SONARQUBE_PROJECT = 'ligne-rouge'
-        // webDockerImageName = "martinez42/file-rouge-web"
-        // dbDockerImageName = "martinez42/file-rouge-db"
-        // webDockerImage = ""
-        // dbDockerImage = ""
-        // registryCredential = 'docker-credentiel'
+        SLACK_CHANNEL = '#groupe4'
+        SLACK_TOKEN= credentials('slack-token')
         DOCKER_REGISTRY = 'registry.hub.docker.com'
         DOCKER_CREDENTIALS_ID = 'docker-credentiel'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml' 
@@ -31,15 +28,36 @@ pipeline {
                 }
             }
         }
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             timeout(time: 1, unit: 'HOURS') {
-        //                 waitForQualityGate abortPipeline: true
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                        waitForQualityGate abortPipeline: true
+                        currentBuild.result = qualityGate.status
+                    }
+                }
+            }
+        }
+        stage('Notify Quality Gate with Slack') {
+            when {
+                expression {
+                    currentBuild.result != null && currentBuild.result != 'SUCCESS'
+                }
+            }
+            steps {
+                script {
+                    def color = currentBuild.result == 'SUCCESS' ? 'ok' : 'danger'
+                    def message = "Build ${currentBuild.result}: ${env.JOB_NAME} - ${env.BUILD_NUMBER} \n More details at: ${env.BUILD_URL}"
+
+                    slackSend(
+                        color: color,
+                        message: message,
+                        channel: env.SLACK_CHANNEL,
+                        tokenCredentialId: env.SLACK_TOKEN
+                    )
+                }
+            }
+        }
         stage('Pushing Images to Docker Registry') {
             steps {
                 script {
