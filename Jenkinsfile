@@ -3,7 +3,7 @@ pipeline {
         SONARQUBE_URL = 'http://localhost:9000'
         SONARQUBE_TOKEN = credentials('sonar-token')
         SONARQUBE_PROJECT = 'ligne-rouge'
-        SLACK_CHANNEL = '#groupe4'
+        SLACK_CHANNEL = 'groupe4'
         SLACK_TOKEN= credentials('slack-token')
         DOCKER_REGISTRY = 'registry.hub.docker.com'
         DOCKER_CREDENTIALS_ID = 'docker-credentiel'
@@ -28,6 +28,16 @@ pipeline {
                 }
             }
         }
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             timeout(time: 1, unit: 'HOURS') {
+        //                 def qualityGate = waitForQualityGate abortPipeline: true
+        //                 currentBuild.result = qualityGate.status
+        //             }
+        //         }
+        //     }
+        // }
         stage('Notify Quality Gate with Slack') {
             when {
                 expression {
@@ -77,7 +87,7 @@ pipeline {
                 }
             }
         }
-        stage('Install Python dependencies and Deploy with Ansible') {
+        stage('Deploy with Ansible') {
             steps {
                 script {
                     sh """
